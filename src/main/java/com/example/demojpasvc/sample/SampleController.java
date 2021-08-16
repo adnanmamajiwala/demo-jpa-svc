@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/samples")
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin
 public class SampleController {
 
     private final SampleRepository repository;

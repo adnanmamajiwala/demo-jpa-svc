@@ -2,6 +2,7 @@ package com.example.demojpasvc.sample;
 
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -17,11 +18,14 @@ public class SampleController {
     private final SampleRepository repository;
 
     @GetMapping()
-    public Page<Sample> findAll(@RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
+    public Page<Sample> findAll(@RequestParam(name = "text", defaultValue = "") String searchText,
+                                @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
                                 @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
                                 @RequestParam(name = "sortBy", defaultValue = "id") String sortBy,
                                 @RequestParam(name = "sortDirection", defaultValue = "ASC") Direction direction) {
-        return repository.findAll(PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortBy)));
+
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortBy, "org", "id"));
+        return Strings.isBlank(searchText) ? repository.findAll(pageable) : repository.searchByText(searchText, pageable);
     }
 
 }

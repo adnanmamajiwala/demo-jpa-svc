@@ -23,8 +23,8 @@ public class SampleController {
                                 @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
                                 @RequestParam(name = "sortBy", defaultValue = "id") String sortBy,
                                 @RequestParam(name = "sortDirection", defaultValue = "ASC") Direction direction) {
-
-        PageRequest pageable = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortBy, "org", "id"));
+        Sort sort = Sort.by(Direction.ASC, "org").and(Sort.by(direction, sortBy));
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort);
         return Strings.isBlank(searchText) ? repository.findAll(pageable) : repository.searchByText(searchText, pageable);
     }
 

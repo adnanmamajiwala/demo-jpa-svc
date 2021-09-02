@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface SampleRepository extends JpaRepository<Sample, Long> {
 
     @Query("select s from Sample s " +
@@ -14,4 +16,7 @@ public interface SampleRepository extends JpaRepository<Sample, Long> {
             " or concat(s.tax,'') like %:text% or concat(s.start,'') like %:text% or concat(s.end,'') like %:text% " +
             " or concat(s.total,'') like %:text% or concat(s.quantity,'') like %:text% or concat(s.weight,'') like %:text% ")
     Page<Sample> searchByText(String text, Pageable pageable);
+
+    List<Sample> findAllByBatchCodeIn(List<String> codes);
+
 }

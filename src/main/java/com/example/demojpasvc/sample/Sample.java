@@ -1,10 +1,11 @@
 package com.example.demojpasvc.sample;
 
+import com.example.demojpasvc.customer.Customer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -18,8 +19,7 @@ import java.time.Instant;
 public class Sample {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String org;
@@ -38,6 +38,11 @@ public class Sample {
     private String unit;
     private String brand;
     private String qrCode;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    @JsonBackReference
+    private Customer customer;
 
     @Basic
     private Instant createDate;

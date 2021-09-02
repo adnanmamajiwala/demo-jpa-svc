@@ -9,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/samples")
@@ -17,7 +19,7 @@ public class SampleController {
 
     private final SampleRepository repository;
 
-    @GetMapping()
+    @GetMapping
     public Page<Sample> findAll(@RequestParam(name = "text", defaultValue = "") String searchText,
                                 @RequestParam(name = "pageNumber", defaultValue = "0") int pageNumber,
                                 @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
@@ -27,5 +29,11 @@ public class SampleController {
         PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort);
         return Strings.isBlank(searchText) ? repository.findAll(pageable) : repository.searchByText(searchText, pageable);
     }
+
+    @PostMapping("/batchCode")
+    public List<Sample> findByBatchCodes(List<String> codes) {
+        return repository.findAllByBatchCodeIn(codes);
+    }
+
 
 }

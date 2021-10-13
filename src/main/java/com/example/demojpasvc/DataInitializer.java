@@ -2,6 +2,9 @@ package com.example.demojpasvc;
 
 import com.example.demojpasvc.customer.Customer;
 import com.example.demojpasvc.customer.CustomerRepository;
+import com.example.demojpasvc.preset.Preset;
+import com.example.demojpasvc.preset.PresetRepository;
+import com.example.demojpasvc.preset.PresetSetting;
 import com.example.demojpasvc.sample.Sample;
 import com.example.demojpasvc.sample.SampleRepository;
 import com.thedeanda.lorem.Lorem;
@@ -11,10 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -22,12 +22,27 @@ public class DataInitializer implements CommandLineRunner {
 
     private final SampleRepository sampleRepository;
     private final CustomerRepository customerRepository;
+    private final PresetRepository presetRepository;
 
     @Override
     public void run(String... args) {
         List<Customer> customers = customerRepository.saveAll(generateCustomerData());
         Collections.shuffle(customers);
         sampleRepository.saveAll(generateSampleData(customers));
+        presetRepository.save(getPreset());
+    }
+
+    private Preset getPreset() {
+        return Preset.builder()
+                .practiceId(10001L)
+                .typeName("iv")
+                .settings(Arrays.asList(PresetSetting.builder()
+                        .name("navneet")
+                        .facilities(Arrays.asList("Sed quis, consequat purus eu,", "Phasellus ornare nisl"))
+                        .itemIds(Arrays.asList("3c0a4d55-f682-4991-a4ba-159994b22a92", "15306d06-a18e-4c4a-8f88-7baa3a8a67dd", "f7ef9888-187f-4dff-970e-f8ba8452a611"))
+                        .itemNames(Arrays.asList("Fusce faucibus sem at", "Ut non ligula finibus"))
+                        .build()))
+                .build();
     }
 
     private List<Customer> generateCustomerData() {

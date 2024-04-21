@@ -1,5 +1,6 @@
 package com.example.demojpasvc.customer;
 
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -7,7 +8,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,10 +51,10 @@ public class CustomerController {
     private Specification<Customer> getSpec(String name, String phone, String city, String state) {
         return (root, criteriaQuery, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if(name != null) predicates.add(builder.like(root.get("name"), "%"+name+"%"));
-            if(phone != null) predicates.add(builder.like(root.get("phone"), "%"+phone+"%"));
-            if(city != null) predicates.add(builder.like(root.get("city"), "%"+city+"%"));
-            if(state != null) predicates.add(builder.like(root.get("name"), "%"+state+"%"));
+            if (name != null) predicates.add(builder.like(root.get("name"), "%" + name + "%"));
+            if (phone != null) predicates.add(builder.like(root.get("phone"), "%" + phone + "%"));
+            if (city != null) predicates.add(builder.like(root.get("city"), "%" + city + "%"));
+            if (state != null) predicates.add(builder.like(root.get("name"), "%" + state + "%"));
             return builder.or(predicates.toArray(new Predicate[]{}));
         };
     }
